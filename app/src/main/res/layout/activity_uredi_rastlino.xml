@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#709469"
+    tools:context=".UrediRastlino">
+
+    <ImageButton
+        android:id="@+id/zapriGumb"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="#00000000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/close" />
+
+    <ImageButton
+        android:id="@+id/potrdiGumb"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="#00000000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tik"/>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="95dp"
+        android:layout_marginLeft="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sorta"
+        android:textColor="#ffffff" />
+    <EditText
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="120dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:background="@drawable/background_input"
+        android:textColor="#000000"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"/>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="175dp"
+        android:layout_marginLeft="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Znanestveno ime"
+        android:textColor="#ffffff" />
+
+    <EditText
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="200dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:background="@drawable/background_input"
+        android:textColor="#000000"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"/>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="255dp"
+        android:layout_marginLeft="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ime"
+        android:textColor="#ffffff" />
+
+    <EditText
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="280dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:background="@drawable/background_input"
+        android:textColor="#000000"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"/>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="335dp"
+        android:layout_marginLeft="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zalivanje"
+        android:textColor="#ffffff" />
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="375dp"
+        android:layout_marginLeft="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Na                dni"
+        android:textColor="#ffffff" />
+
+    <EditText
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="365dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/background_input"
+        android:textColor="#000000"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"/>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="415dp"
+        android:layout_marginLeft="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Datum prvega zalivanja"
+        android:textColor="#ffffff" />
+
+    <EditText
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="445dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/background_input"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
