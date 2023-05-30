@@ -47,17 +47,18 @@ public class UrediRastlino extends AppCompatActivity {
         String Sorta = getIntent().getStringExtra("CommonName");
         String ZnanstvenoIme = getIntent().getStringExtra("ScienName");
         String PotSlika = getIntent().getStringExtra("PathImgae");
+        System.out.println("AAAAAAAAAAAAAAAARararar"+ PotSlika);
         String shraniPot = "";
         String shraniDatotekaIme = "";
 
-        if (!Objects.equals(Sorta, "")) {
+        if (!Objects.equals(Sorta, "") && Sorta != null) {
             sortaPolje.setText(Sorta);
             imePolje.setText(Sorta);
         }
-        if (!Objects.equals(ZnanstvenoIme, "")) {
+        if (!Objects.equals(ZnanstvenoIme, "") && ZnanstvenoIme != null) {
             znanstvenoPolje.setText(ZnanstvenoIme);
         }
-        if (!Objects.equals(PotSlika, "")) {
+        if (!Objects.equals(PotSlika, "") && PotSlika != null) {
             shraniDatotekaIme = PotSlika.substring(PotSlika.length()-23, PotSlika.length()-4)+".txt";
             System.out.println(shraniDatotekaIme);
             shraniPot = PotSlika.substring(0, PotSlika.length()-23);
