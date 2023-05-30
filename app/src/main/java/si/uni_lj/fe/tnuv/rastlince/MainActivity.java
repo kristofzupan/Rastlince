@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 CAMERA_PERMISSION,
                 CAMERA_REQUEST_CODE
         );
+        System.out.println("NNNNNNNNNNNNNNNNNNNNOW");
+        if (hasCameraPermission()) {
+            enableCamera();
+        }
     }
 
     private void enableCamera() {

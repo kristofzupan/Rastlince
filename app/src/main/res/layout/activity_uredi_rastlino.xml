@@ -38,9 +38,10 @@
         android:layout_marginLeft="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sorta"
+        android:text="@string/sorta"
         android:textColor="#ffffff" />
     <EditText
+        android:id="@+id/sortaPolje"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -60,10 +61,11 @@
         android:layout_marginLeft="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Znanestveno ime"
+        android:text="@string/znanstveno_ime"
         android:textColor="#ffffff" />
 
     <EditText
+        android:id="@+id/znanstvenoPolje"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -83,10 +85,11 @@
         android:layout_marginLeft="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ime"
+        android:text="@string/ime"
         android:textColor="#ffffff" />
 
     <EditText
+        android:id="@+id/imePolje"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -106,7 +109,7 @@
         android:layout_marginLeft="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zalivanje"
+        android:text="@string/zalivanje"
         android:textColor="#ffffff" />
 
     <TextView
@@ -120,6 +123,7 @@
         android:textColor="#ffffff" />
 
     <EditText
+        android:id="@+id/zalivanjeDni"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="75dp"
@@ -129,6 +133,7 @@
         android:layout_height="40dp"
         android:background="@drawable/background_input"
         android:textColor="#000000"
+        android:textAlignment="center"
         android:paddingLeft="6dp"
         android:paddingRight="6dp"/>
 
@@ -139,10 +144,11 @@
         android:layout_marginLeft="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Datum prvega zalivanja"
+        android:text="@string/datum"
         android:textColor="#ffffff" />
 
     <EditText
+        android:id="@+id/zalivanjeDatum"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="30dp"
@@ -150,6 +156,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="200dp"
         android:layout_height="40dp"
-        android:background="@drawable/background_input"/>
+        android:background="@drawable/background_input"
+        android:textColor="#000000"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

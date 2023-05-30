@@ -72,9 +72,12 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
     private Button preskociGumb;
     private ImageButton slikajGumb;
     private ImageButton zapriOverlay;
+    private ImageButton potrdiSliko;
     private TextView sortaIme;
     private GifImageView nalaganje;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+
+    private File savedFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +130,6 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-        Log.d(TAG, "SIIIIIIIIIIIIIIIIIIIIIIIIIZE" + width + " . " + height);
 
         Preview preview = new Preview.Builder().build();
         slikaZajemanje = new ImageCapture.Builder().setTargetRotation(Surface.ROTATION_0).build();
@@ -137,20 +139,16 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
     }
 
     private void zajemiSliko() {
-        Log.d(TAG, "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYyy");
         File datotekaShranjenaSlika = getOutputFile();
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(datotekaShranjenaSlika).build();
         slikaZajemanje.takePicture(outputFileOptions, ContextCompat.getMainExecutor(this), new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-
-                        Log.d(TAG, "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                         Log.d(TAG, datotekaShranjenaSlika.toString());
                         // Get the saved image file
-                        File savedFile = !datotekaShranjenaSlika.toString().equals("") ? new File(datotekaShranjenaSlika.toString()) : null;
+                        savedFile = !datotekaShranjenaSlika.toString().equals("") ? new File(datotekaShranjenaSlika.toString()) : null;
 
                         if (savedFile != null) {
-                            Log.d(TAG, "onImageSaved: AAAAAAAAAAAAAAAAAA");
                             // Display the captured image
                             Bitmap bitmap = BitmapFactory.decodeFile(savedFile.getAbsolutePath());
 
@@ -200,7 +198,8 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
     @Override
     public void onResultReceived(String result) {
         // Process the result here
-        Log.d(TAG, "RRRRRRRRREEEEEEEEEEEEEesponse: ");
+        potrdiSliko = findViewById(R.id.potrdiSliko);
+
         //System.out.println(result);
         Gson gson = new Gson();
         ResponseData responseData = gson.fromJson(result, ResponseData.class);
@@ -210,6 +209,14 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
         rezultatOverlay.setVisibility(View.VISIBLE);
         String tekstSortaIme = responseData.getFirstResponseDataResultsSpeciesCommonName() + "\n" + responseData.getFirstRespnseDataResultsSpeciesName();
         sortaIme.setText(tekstSortaIme);
+
+        potrdiSliko.setOnClickListener(v -> {
+            Intent intent = new Intent(this, UrediRastlino.class);
+            intent.putExtra("CommonName", responseData.getFirstResponseDataResultsSpeciesCommonName());
+            intent.putExtra("ScienName", responseData.getFirstRespnseDataResultsSpeciesName());
+            intent.putExtra("PathImgae", savedFile.getAbsolutePath());
+            startActivity(intent);
+        });
 
     }
 

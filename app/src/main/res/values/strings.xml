@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Rastlince</string>
     <string name="preskoci">Preskoči</string>
+    <string name="sorta">Sorta</string>
+    <string name="znanstveno_ime">Znanstveno ime</string>
+    <string name="ime">Ime</string>
+    <string name="zalivanje">Zalivanje</string>
+    <string name="datum">Datum prvega zalivanja</string>
 </resources>
