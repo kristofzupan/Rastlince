@@ -18,4 +18,26 @@
     <string name="znanstvenoImeJson">ZnanstvenoIme</string>
     <string name="zalivanjeDniJson">ZalivanjeDni</string>
     <string name="zalivanjeDateJson">ZalivanjeDate</string>
+
+    <string-array name="imena_rastlin">
+        <item>Marta</item>
+        <item>Polde</item>
+        <item>Snowdrop</item>
+        <item>Orhideja</item>
+    </string-array>
+
+    <string-array name="vrste_rastlin">
+        <item>Peace Lily</item>
+        <item>Cactus</item>
+        <item>Snowdrop</item>
+        <item>Moth Orchid</item>
+    </string-array>
+
+    <string-array name="vrste_rastlin_lat">
+        <item>Spatiphyllum</item>
+        <item>Stenocactus</item>
+        <item>Galanthus Nivalis</item>
+        <item>Phalaenopsis</item>
+    </string-array>
+
 </resources>

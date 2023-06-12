@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="rastline_1">#a1b089</color>
+    <color name="rastline_2">#91a57b</color>
+    <color name="rastline_3">#7e9871</color>
+    <color name="rastline_4">#6c8d60</color>
+    <color name="rastline_5">#588159</color>
+    <color name="rastline_6">#527853</color>
+    <color name="rastline_7">#588159</color>
+    <color name="rastline_8">#496e4c</color>
+    <color name="rastline_9">#88a972</color>
+    <color name="rastline_10">#709d62</color>
+    <color name="rastline_11">#a4bb83</color>
+    <color name="rastline_12">#5c9256</color>
+    <color name="rastline_13">#4b804c</color>
+    <color name="rastline_14">#606d3f</color>
+    <color name="rastline_15">#78824d</color>
+    <color name="ozadje_zelena">#7DA691</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey_light">#D9D9D9</color>
 </resources>

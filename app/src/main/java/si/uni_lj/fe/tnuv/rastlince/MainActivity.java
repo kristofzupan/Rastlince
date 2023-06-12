@@ -3,6 +3,8 @@ package si.uni_lj.fe.tnuv.rastlince;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,14 +13,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     private static final String[] CAMERA_PERMISSION = new String[]{Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
+
+    ArrayList<RastlinaModel> rastlineModeli = new ArrayList<>();
+    int[] rastlineSlike = {R.drawable.e, R.drawable.b, R.drawable.c, R.drawable.d};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RecyclerView recyclerView = findViewById(R.id.seznamRastlin);
+        pripraviModeleRastlin();
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, rastlineModeli);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Button dodajRastlino = findViewById(R.id.dodajRastlino);
 
@@ -32,6 +45,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void pripraviModeleRastlin() {
+        String[] rastlineImena = getResources().getStringArray(R.array.imena_rastlin);
+        String[] rastlineVrste = getResources().getStringArray(R.array.vrste_rastlin);
+        String[] rastlineVrsteLat = getResources().getStringArray(R.array.vrste_rastlin_lat);
+
+        for (int i = 0; i < rastlineImena.length; i++) {
+            rastlineModeli.add(new RastlinaModel(rastlineImena[i], rastlineVrste[i], rastlineVrsteLat[i], rastlineSlike[i]));
+        }
     }
 
     private boolean hasCameraPermission() {
