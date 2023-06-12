@@ -159,6 +159,7 @@
         android:background="@drawable/background_input"
         android:textColor="#000000"
         android:paddingLeft="6dp"
-        android:paddingRight="6dp"/>
+        android:paddingRight="6dp"
+        android:focusable="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

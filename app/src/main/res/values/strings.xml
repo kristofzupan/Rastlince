@@ -6,4 +6,16 @@
     <string name="ime">Ime</string>
     <string name="zalivanje">Zalivanje</string>
     <string name="datum">Datum prvega zalivanja</string>
+    <string name="napaka_omrezje">napaka omrežje</string>
+    <string name="napaka_povezava">napaka povezava</string>
+    <string name="api_url">https://my-api.plantnet.org/v2/identify/all?api-key=2b109N3y1XY0iOV6VMH4ZFpO</string>
+    <string name="toast_notFound">Rastlina ni bila prepoznana.\n Poskusite ponovno!</string>
+    <string name="toast_error">Napaka! Poskusite ponovno!</string>
+    <string name="datumSimpleFormat">yyyyMMdd_HHmmss</string>
+    <string name="commonName">CommonName</string>
+    <string name="scienceName">ScienceName</string>
+    <string name="pathImage">PathImage</string>
+    <string name="znanstvenoImeJson">ZnanstvenoIme</string>
+    <string name="zalivanjeDniJson">ZalivanjeDni</string>
+    <string name="zalivanjeDateJson">ZalivanjeDate</string>
 </resources>

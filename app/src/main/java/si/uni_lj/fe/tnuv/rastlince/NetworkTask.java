@@ -52,7 +52,7 @@ public class NetworkTask extends AsyncTask<String, Void, String> {
             response = client.newCall(request).execute();
         } catch (IOException e) {
             Log.e(TAG, "Exception: " + e.getMessage());
-            return null;
+            return e.toString();
         }
 
         // Handle the response
@@ -61,11 +61,11 @@ public class NetworkTask extends AsyncTask<String, Void, String> {
                 return response.body().string();
             } catch (IOException e) {
                 Log.e(TAG, "Exception: " + e.getMessage());
-                return null;
+                return e.toString();
             }
         } else {
             Log.e(TAG, "Request failed: " + response.code());
-            return null;
+            return String.valueOf(response.code());
         }
     }
 
@@ -74,13 +74,13 @@ public class NetworkTask extends AsyncTask<String, Void, String> {
         if (result != null) {
             callback.onResultReceived(result);
         } else {
-            callback.onRequestFailed();
+            callback.onRequestFailed(result);
         }
     }
 
     public interface NetworkCallback {
         void onResultReceived(String result);
 
-        void onRequestFailed();
+        void onRequestFailed(String result);
     }
 }

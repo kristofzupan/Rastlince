@@ -16,6 +16,9 @@ public class Species {
     }
 
     public String getSpeciesCommonName() {
-        return commonNames.get(0);
+        if (!commonNames.isEmpty()) {
+            return commonNames.get(0);
+        }
+        return "";
     }
 }

@@ -48,9 +48,15 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import android.util.Rational;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -76,7 +82,6 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
     private TextView sortaIme;
     private GifImageView nalaganje;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-
     private File savedFile;
 
     @Override
@@ -97,6 +102,9 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
 
         preskociGumb = findViewById(R.id.preskociGumb);
         preskociGumb.setOnClickListener(v -> {
+            if (savedFile != null) {
+                savedFile.delete();
+            }
             Intent intent = new Intent(this, UrediRastlino.class);
             startActivity(intent);
         });
@@ -108,6 +116,7 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
             predPogled.setVisibility(View.VISIBLE);
             preskociGumb.setVisibility(View.VISIBLE);
             slikajGumb.setVisibility(View.VISIBLE);
+            savedFile.delete();
         });
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
@@ -178,7 +187,7 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
                             nalaganje.setVisibility(View.VISIBLE);
                             preskociGumb.setVisibility(View.VISIBLE);
 
-                            String apiEndpoint = "https://my-api.plantnet.org/v2/identify/all?api-key=2b109N3y1XY0iOV6VMH4ZFpO";
+                            String apiEndpoint = getString(R.string.api_url);
                             String imagePath = savedFile.getAbsolutePath();
 
                             NetworkTask networkTask = new NetworkTask(Kamera.this);
@@ -197,33 +206,62 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
 
     @Override
     public void onResultReceived(String result) {
+        if (Objects.equals(result, "404")) {
+            onRequestFailed(result);
+            return;
+        }
+        if (!isJSONValid(result)) {
+            onRequestFailed(result);
+            return;
+        }
         // Process the result here
         potrdiSliko = findViewById(R.id.potrdiSliko);
-
-        //System.out.println(result);
         Gson gson = new Gson();
         ResponseData responseData = gson.fromJson(result, ResponseData.class);
-        System.out.println(responseData.getFirstRespnseDataResultsSpeciesName());
-        System.out.println(responseData.getFirstResponseDataResultsSpeciesCommonName());
+        //System.out.println(responseData.getFirstRespnseDataResultsSpeciesName());
+        //System.out.println(responseData.getFirstResponseDataResultsSpeciesCommonName());
         nalaganje.setVisibility(View.GONE);
         rezultatOverlay.setVisibility(View.VISIBLE);
-        String tekstSortaIme = responseData.getFirstResponseDataResultsSpeciesCommonName() + "\n" + responseData.getFirstRespnseDataResultsSpeciesName();
+        String tekstSortaIme = "";
+        if (!Objects.equals(responseData.getFirstResponseDataResultsSpeciesCommonName(), "")) {
+            tekstSortaIme += responseData.getFirstResponseDataResultsSpeciesCommonName();
+        }
+        if (!Objects.equals(responseData.getFirstRespnseDataResultsSpeciesName(), "")) {
+            tekstSortaIme += "\n" + responseData.getFirstRespnseDataResultsSpeciesName();
+        }
         sortaIme.setText(tekstSortaIme);
 
         potrdiSliko.setOnClickListener(v -> {
             Intent intent = new Intent(this, UrediRastlino.class);
-            intent.putExtra("CommonName", responseData.getFirstResponseDataResultsSpeciesCommonName());
-            intent.putExtra("ScienName", responseData.getFirstRespnseDataResultsSpeciesName());
-            intent.putExtra("PathImgae", savedFile.getAbsolutePath());
+            if (!Objects.equals(responseData.getFirstResponseDataResultsSpeciesCommonName(), "")) {
+                intent.putExtra(getString(R.string.commonName), responseData.getFirstResponseDataResultsSpeciesCommonName());
+            }
+            if (!Objects.equals(responseData.getFirstRespnseDataResultsSpeciesName(), "")) {
+                intent.putExtra(getString(R.string.scienceName), responseData.getFirstRespnseDataResultsSpeciesName());
+            }
+            intent.putExtra(getString(R.string.pathImage), savedFile.getAbsolutePath());
             startActivity(intent);
         });
 
     }
 
     @Override
-    public void onRequestFailed() {
+    public void onRequestFailed(String result) {
         // Handle the request failure here
         Log.e(TAG, "Request failed");
+        if (Objects.equals(result, "404")) {
+            Toast.makeText(this, getString(R.string.toast_notFound),  Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, getString(R.string.toast_error),  Toast.LENGTH_SHORT).show();
+        }
+        zajetaSlika.setVisibility(View.GONE);
+        rezultatOverlay.setVisibility(View.GONE);
+        predPogled.setVisibility(View.VISIBLE);
+        preskociGumb.setVisibility(View.VISIBLE);
+        slikajGumb.setVisibility(View.VISIBLE);
+        nalaganje.setVisibility(View.GONE);
+        savedFile.delete();
+
     }
 
     private File getOutputFile() {
@@ -234,9 +272,24 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
         }
 
         // Create a file to save the captured image
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String timeStamp = new SimpleDateFormat(getString(R.string.datumSimpleFormat), Locale.getDefault()).format(new Date());
         String fileName = "IMG_" + timeStamp + ".jpg";
         Log.d(TAG, fileName + " ---- " + outputDir);
         return new File(outputDir, fileName);
+    }
+
+    private boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            // edited, to include @Arthur's comment
+            // e.g. in case JSONArray is valid as well...
+            try {
+                new JSONArray(test);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
     }
 }
