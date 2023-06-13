@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final String[] CAMERA_PERMISSION = new String[]{Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
-
     ArrayList<RastlinaModel> rastlineModeli = new ArrayList<>();
     int[] rastlineSlike = {R.drawable.e, R.drawable.b, R.drawable.c, R.drawable.d};
+    private RecyclerViewAdapter.ClickListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.seznamRastlin);
         pripraviModeleRastlin();
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, rastlineModeli);
+
+        RVsetOnClickListener();
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, rastlineModeli, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -45,6 +47,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void RVsetOnClickListener() {
+        listener = new RecyclerViewAdapter.ClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getApplicationContext(), Profil.class);
+                intent.putExtra("ime", rastlineModeli.get(position).getRastlinaIme());
+                intent.putExtra("vrsta", rastlineModeli.get(position).getRastlinaVrsta());
+                intent.putExtra("vrstaLat", rastlineModeli.get(position).getRastlinaVrstaLat());
+                //intent.putExtra("img", rastlineModeli.get(position).);
+                startActivity(intent);
+            }
+        };
     }
 
     private void pripraviModeleRastlin() {

@@ -18,10 +18,13 @@ import java.util.Random;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
     Context context;
     ArrayList<RastlinaModel> rastlinaModeli;
+    private ClickListener listener;
 
-    public RecyclerViewAdapter(Context context, ArrayList<RastlinaModel> rastlinaModeli) {
+
+    public RecyclerViewAdapter(Context context, ArrayList<RastlinaModel> rastlinaModeli, ClickListener listener) {
         this.context = context;
         this.rastlinaModeli = rastlinaModeli;
+        this.listener = listener;
     }
 
     @NonNull
@@ -75,7 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return rastlinaModeli.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imageView;
         TextView tvIme, tvVrsta, tvVrstaLat;
@@ -91,6 +94,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvVrstaLat =itemView.findViewById(R.id.rastlinaVrstaLat);
 
             card = itemView.findViewById(R.id.seznamCard);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onClick(itemView, getAdapterPosition());
         }
     }
+
+    public interface ClickListener {
+        void onClick(View v, int position);
+    }
+
 }
