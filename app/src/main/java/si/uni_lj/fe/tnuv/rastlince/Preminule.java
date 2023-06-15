@@ -34,11 +34,11 @@ public class Preminule extends AppCompatActivity {
         View ozadje = findViewById(R.id.ozadje);
         ozadje.setBackgroundResource(R.color.ozadje_preminule);
 
-        TextView text = findViewById(R.id.seznamText);
-        text.setText("Preminule rastline:");
+        //TextView text = findViewById(R.id.seznamText);
+        //text.setText("Preminule rastline:");
 
-        ImageButton plus = findViewById(R.id.dodajRastlino);
-        plus.setVisibility(View.GONE);
+        //ImageButton plus = findViewById(R.id.dodajRastlino);
+        //plus.setVisibility(View.GONE);
 
         ImageButton main = (ImageButton)findViewById(R.id.PreminuleIkona);
         main.setImageResource(R.drawable.kangla);

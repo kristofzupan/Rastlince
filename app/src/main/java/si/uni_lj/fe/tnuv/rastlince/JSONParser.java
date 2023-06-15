@@ -23,14 +23,14 @@ public class JSONParser {
 
             // Getting JSON Array node
             //JSONArray seznam = jsonObj;
-            //JSONArray seznam = jsonObj.getJSONArray("rastlina");
+            JSONArray seznam = jsonObj.getJSONArray("rastlina");
             //System.out.println("26: " + seznam);
 
             // looping through All Files
-            //for (int i = 0; i < seznam.length(); i++) {
+            for (int i = 0; i < seznam.length(); i++) {
 
-                //JSONObject r = seznam.getJSONObject(i);
-                JSONObject r = jsonObj;
+                JSONObject r = seznam.getJSONObject(i);
+                //JSONObject r = jsonObj;
                 System.out.println("32: " + r);
 
                 String ime = r.getString("Ime");
@@ -49,7 +49,7 @@ public class JSONParser {
 
                 // adding contact to contact list
                 seznamRastlin.add(rastlina);
-           // }
+            }
         } catch (final JSONException e) {
             Log.e(TAG, "Json parsing error: " + e.getMessage());
         }

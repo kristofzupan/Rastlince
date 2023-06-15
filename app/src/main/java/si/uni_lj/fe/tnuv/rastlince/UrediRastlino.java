@@ -140,7 +140,7 @@ public class UrediRastlino extends AppCompatActivity  implements DatePickerDialo
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        localDate = LocalDate.of(year, month, dayOfMonth);
+        localDate = LocalDate.of(year, month+1, dayOfMonth);
         zalivanjeDatum.setText(localDate.toString());
     }
 

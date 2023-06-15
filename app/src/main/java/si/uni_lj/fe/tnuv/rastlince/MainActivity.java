@@ -1,23 +1,36 @@
 package si.uni_lj.fe.tnuv.rastlince;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myAlarm();
 
         ImageButton dodajRastlino = findViewById(R.id.dodajRastlino);
 
@@ -64,10 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
         String path = "/storage/emulated/0/Android/data/si.uni_lj.fe.tnuv.rastlince/files/Pictures/";
 
-
-
-        String s = "";
-
         FileFilter filterJson = new FileFilter() {
 
             public boolean accept(File f)
@@ -78,36 +88,54 @@ public class MainActivity extends AppCompatActivity {
 
         File directory = new File(path);
         File[] file = directory.listFiles(filterJson);
+        String JsonString = "{\"rastlina\": [";
 
         for (int i = 0; i < file.length; i++) {
             File finalF = file[i];
             PrenosPodatkov pp = new PrenosPodatkov(finalF);
-            new Thread() {
-                public void run() {
-                    String rezultat = pp.loadJson(finalF);
-                    runOnUiThread(() -> prikaziPodatke(rezultat));
-                }
-            }.start();
-        };
+            String rezultat = pp.loadJson(finalF);
+            System.out.println(rezultat);
+            if (i != 0) {
+                JsonString = JsonString + ",";
+            }
+            JsonString = JsonString + rezultat;
+
+        }
+        JsonString += "]}";
+        System.out.println(JsonString);
+        rastlineModeli = new JSONParser().parseToArrayList(JsonString);
 
 
-      /*  }*/
-    }
 
-    private void prikaziPodatke(String rezultat) {
-        System.out.println("main 97:" + rezultat.getClass());
-        rastlineModeli = new JSONParser().parseToArrayList(rezultat);
-        System.out.println("main 99000:" + rastlineModeli);
         SimpleAdapter adapter = new SimpleAdapter(
-                this,
+                MainActivity.this,
                 rastlineModeli,
                 R.layout.list_view_row,
-                new String[] {"ime", "znanstveno ime", "sorta"},
-                new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta}
+                new String[] {"ime", "znanstveno ime", "sorta", "image"},
+                new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
         );
-
-        // vstavi v activity_main (xml)
         lv.setAdapter(adapter);
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        Thread thread = new Thread() {
+            public void run() {
+                for (int i = 0; i < rastlineModeli.size(); i++) {
+                    HashMap<String, String> item = rastlineModeli.get(i);
+                    String imagePath = file[i].getAbsolutePath();
+                    imagePath = imagePath.substring(0, imagePath.length() - 4) + "jpg";
+
+                    ImageView imageView = new ImageView(MainActivity.this);
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imagePath);
+                    imageView.setImageBitmap(myBitmap);
+
+                    item.put("image", imagePath); // Add the image path to the HashMap
+                }
+
+                runOnUiThread(() -> adapter.notifyDataSetChanged());
+            }
+        };
+        thread.start();
+
 
     }
 
@@ -133,5 +161,36 @@ public class MainActivity extends AppCompatActivity {
     private void enableCamera() {
         Intent intent = new Intent(this, Kamera.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == 0) {
+            enableCamera();
+        } else if (grantResults[0] == -1) {
+            Toast.makeText(this, "Prosimo dovolite uporabo kamere!",  Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void myAlarm() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.MINUTE, 38);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTime().compareTo(new Date()) < 0)
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        }
+
     }
 }
