@@ -9,10 +9,7 @@
         android:id="@+id/seznamCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_margin="10dp"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,10 +37,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
                 android:backgroundTint="@color/grey_light"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/rastlinaIkona"
                 app:layout_constraintTop_toTopOf="@id/rastlinaIkona" />
 
@@ -53,10 +50,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
-                android:textColor="@color/black"
                 android:backgroundTint="@color/grey_light"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/rastlinaIkona"
-                app:layout_constraintTop_toBottomOf="@id/rastlinaIme"/>
+                app:layout_constraintTop_toBottomOf="@id/rastlinaIme" />
 
             <TextView
                 android:id="@+id/rastlinaVrstaLat"
@@ -64,11 +61,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
+                android:backgroundTint="@color/grey_light"
                 android:textColor="@color/black"
                 android:textStyle="italic"
-                android:backgroundTint="@color/grey_light"
                 app:layout_constraintStart_toEndOf="@+id/rastlinaIkona"
-                app:layout_constraintTop_toBottomOf="@id/rastlinaVrsta"/>
+                app:layout_constraintTop_toBottomOf="@id/rastlinaVrsta" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

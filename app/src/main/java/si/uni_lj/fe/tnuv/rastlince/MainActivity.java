@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
         lv = findViewById(R.id.seznamRastlin);
 
-        lv.setOnItemClickListener(((parent, view, position, id) -> {
+        /*lv.setOnItemClickListener(((parent, view, position, id) -> {
             Intent intent = new Intent(getApplicationContext(), Profil.class);
             System.out.println(file[(int)id]);
             intent.putExtra("path", file[(int)id].getAbsolutePath());
             startActivity(intent);
-        }));
+        }));*/
         dodajRastlino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
             public boolean accept(File f)
             {
-                return f.getName().endsWith("json");
+                return (f.getName().endsWith("json") && f.getName().startsWith("I"));
             }
         };
 
@@ -126,6 +128,20 @@ public class MainActivity extends AppCompatActivity {
                 new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
         );
         lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick (AdapterView < ? > parent, View view, int position, long id) {
+                Map<String, String> clickedItem = (Map<String, String>) parent.getItemAtPosition(position);
+                System.out.println(clickedItem);
+
+                Intent intent = new Intent(getApplicationContext(), Profil.class);
+
+                intent.putExtra("ime", clickedItem.get("ime"));
+                intent.putExtra("znanstveno ime",clickedItem.get("znanstveno ime"));
+                intent.putExtra("sorta", clickedItem.get("sorta"));
+                intent.putExtra("image", clickedItem.get("image"));
+                startActivity(intent);
+            }
+        });
 
         Handler handler = new Handler(Looper.getMainLooper());
         Thread thread = new Thread() {
@@ -203,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             calendar.add(Calendar.DAY_OF_MONTH, 1);
 
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         if (alarmManager != null) {

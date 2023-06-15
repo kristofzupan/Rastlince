@@ -31,7 +31,7 @@ public class JSONParser {
 
                 JSONObject r = seznam.getJSONObject(i);
                 //JSONObject r = jsonObj;
-                System.out.println("32: " + r);
+                //System.out.println("32: " + r);
 
                 String ime = r.getString("Ime");
                 String sorta = r.getString("Sorta");
