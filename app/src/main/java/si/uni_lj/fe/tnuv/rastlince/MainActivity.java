@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
         lv = findViewById(R.id.seznamRastlin);
 
-        /*lv.setOnItemClickListener(((parent, view, position, id) -> {
+        lv.setOnItemClickListener(((parent, view, position, id) -> {
             Intent intent = new Intent(getApplicationContext(), Profil.class);
             System.out.println(file[(int)id]);
             intent.putExtra("path", file[(int)id].getAbsolutePath());
             startActivity(intent);
-        }));*/
+        }));
         dodajRastlino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
         );
         lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick (AdapterView < ? > parent, View view, int position, long id) {
                 Map<String, String> clickedItem = (Map<String, String>) parent.getItemAtPosition(position);
                 System.out.println(clickedItem);
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("image", clickedItem.get("image"));
                 startActivity(intent);
             }
-        });
+        });*/
 
         Handler handler = new Handler(Looper.getMainLooper());
         Thread thread = new Thread() {
@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                 CAMERA_PERMISSION,
                 CAMERA_REQUEST_CODE
         );
-        System.out.println("NNNNNNNNNNNNNNNNNNNNOW");
         if (hasCameraPermission()) {
             enableCamera();
         }

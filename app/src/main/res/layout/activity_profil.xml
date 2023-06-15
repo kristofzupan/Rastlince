@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#ffffff"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/profilSlika"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="330dp"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -98,6 +99,18 @@
         android:backgroundTint="@color/rastline_5"
         app:layout_constraintLeft_toRightOf="@id/bubbleVrsta"
         app:layout_constraintTop_toBottomOf="@id/profilIme"/>
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/koledar"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/bubbleVrstaLat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:theme="@style/CalanderViewCustom"
+        android:dateTextAppearance="@style/CalenderViewDateCustomText"
+        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+        app:mcv_headerTextAppearance="@style/CalanderViewCustom"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

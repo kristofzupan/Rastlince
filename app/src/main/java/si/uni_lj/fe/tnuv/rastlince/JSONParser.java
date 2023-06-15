@@ -36,6 +36,8 @@ public class JSONParser {
                 String ime = r.getString("Ime");
                 String sorta = r.getString("Sorta");
                 String znanstvenoIme = r.getString("ZnanstvenoIme");
+                String zalivanjeDni = r.getString("ZalivanjeDni");
+                String zalivanjeDate = r.getString("ZalivanjeDate");
 
                 // tmp hash map for single contact
                 HashMap<String, String> rastlina = new HashMap<>();
@@ -45,7 +47,9 @@ public class JSONParser {
 
                 rastlina.put("ime", ime);
                 rastlina.put("sorta", sorta);
-                rastlina.put("znanstveno ime", znanstvenoIme);
+                rastlina.put("znanstveno_ime", znanstvenoIme);
+                rastlina.put("zalivanje_date", zalivanjeDate);
+                rastlina.put("zalivanje_dni", zalivanjeDni);
 
                 // adding contact to contact list
                 seznamRastlin.add(rastlina);

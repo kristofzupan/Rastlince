@@ -3,7 +3,9 @@ package si.uni_lj.fe.tnuv.rastlince;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
@@ -15,9 +17,21 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
+
 import java.io.File;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Profil extends AppCompatActivity {
+    private ArrayList<HashMap<String, String>> rastlina;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +45,8 @@ public class Profil extends AppCompatActivity {
         ImageButton puscica = findViewById(R.id.profilPuscica);
         ImageButton grob = findViewById(R.id.grob);
 
+        String path = getIntent().getStringExtra("path");
+
         puscica.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -40,41 +56,79 @@ public class Profil extends AppCompatActivity {
             }
         });
 
-        String ime, vrsta, vrstaLat;
-        String image = null;
+        File file = new File(path);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            ime = extras.getString("ime");
-            vrsta = extras.getString("sorta");
-            vrstaLat = extras.getString("znanstveno ime");
-            image = extras.getString("image");
+        PrenosPodatkov pp = new PrenosPodatkov(file);
+        String rezultat = pp.loadJson(file);
 
-        } else {
-            ime = "????";
-            vrsta = "????";
-            vrstaLat = "????";
+        System.out.print(rezultat);
+        String JsonString = "{\"rastlina\": [" + rezultat + "]}";
+        rastlina = new JSONParser().parseToArrayList(JsonString);
+
+        Bitmap myBitmap = BitmapFactory.decodeFile(path.substring(0, path.length() - 4) + "jpg");
+        try {
+            ExifInterface exif = new ExifInterface(path.substring(0, path.length() - 4) + "jpg");
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+            Matrix matrix = new Matrix();
+            if (orientation == 6) {
+                matrix.postRotate(90);
+            }
+            else if (orientation == 3) {
+                matrix.postRotate(180);
+            }
+            else if (orientation == 8) {
+                matrix.postRotate(270);
+            }
+            myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true); // rotating bitmap
         }
+        catch (Exception e) {
+
+        }
+        slikaPolje.setImageBitmap(myBitmap);
+
+        String ime = rastlina.get(0).get("ime");
+        String vrsta = rastlina.get(0).get("sorta");
+        String vrstaLat = rastlina.get(0).get("znanstveno_ime");
+        String datum = rastlina.get(0).get("zalivanje_date");
+        String dni = rastlina.get(0).get("zalivanje_dni");
 
         imePolje.setText(ime);
         vrstaPolje.setText(vrsta);
         vrstaLatPolje.setText(vrstaLat);
 
-        File imgFile = new File(image);
+        MaterialCalendarView calendarView = findViewById(R.id.koledar);
 
-        if (image != null && imgFile.exists()) {
-            Bitmap bitmap = BitmapFactory.decodeFile(image);
-            bitmap = rotateBitmap(bitmap, 90);
-            slikaPolje.setImageBitmap(bitmap);
-        } else {
-            slikaPolje.setImageResource(R.drawable.i8);
+        System.out.println(datum.substring(0,4) + datum.substring(5,7) + datum.substring(8,10));
+        LocalDate localDate = LocalDate.of(Integer.parseInt(datum.substring(0,4)), Integer.parseInt(datum.substring(5,7)), Integer.parseInt(datum.substring(8,10)));
+        int naDni = Integer.parseInt(dni);
+        System.out.println(localDate + " ._ " + naDni);
+
+        // Create a list of highlighted dates
+        List<CalendarDay> highlightedDates = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            highlightedDates.add(CalendarDay.from(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth())); // Dates are zero-based (0 = January, 1 = February, etc.)
+            localDate = localDate.plusDays(naDni);
         }
 
-        String finalImage = image;
+        // Apply a decorator to highlight the dates
+        calendarView.addDecorator(new HighlightDecorator(Color.RED, highlightedDates));
+
+        // Add a listener to handle date selection events
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(
+                    MaterialCalendarView widget,
+                    CalendarDay date,
+                    boolean selected
+            ) {
+                // Handle the selected date change event here
+            }
+        });
+
         grob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String imgPot = finalImage; // Replace with the actual file path
+                String imgPot = path.substring(0, path.length() - 4) + "jpg"; // Replace with the actual file path
                 String newImgIme = "P_" + imgPot.substring(imgPot.length() - 23, imgPot.length()); // Replace with the new file name
 
                 String filePot = imgPot.substring(0, imgPot.length() - 3) + "json";
@@ -98,6 +152,27 @@ public class Profil extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    // Custom decorator class to highlight dates
+    private static class HighlightDecorator implements DayViewDecorator {
+        private final int color;
+        private final List<CalendarDay> dates;
+
+        public HighlightDecorator(int color, List<CalendarDay> dates) {
+            this.color = color;
+            this.dates = dates;
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return dates.contains(day);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.addSpan(new DotSpan(5, color));
+        }
     }
 
     public static Bitmap rotateBitmap(Bitmap sourceBitmap, float angleDegrees) {
