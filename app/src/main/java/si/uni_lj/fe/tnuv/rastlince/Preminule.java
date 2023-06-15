@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Preminule extends AppCompatActivity {
     ArrayList<RastlinaModel> rastlineModeli = new ArrayList<>();
     //private RecyclerViewAdapter.ClickListener listener;
-    int[] rastlineSlike = {R.drawable.e, R.drawable.b, R.drawable.c, R.drawable.d};
+    int[] rastlineSlike = {R.drawable.i1, R.drawable.i2, R.drawable.i3, R.drawable.i4};
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

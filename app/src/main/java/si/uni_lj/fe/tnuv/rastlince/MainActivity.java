@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,8 +14,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,12 +35,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String[] CAMERA_PERMISSION = new String[]{Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
     private ListView lv;
     private ArrayList<HashMap<String, String>> rastlineModeli;
+    private File[] file;
 
 
     @Override
@@ -53,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
 
         lv = findViewById(R.id.seznamRastlin);
 
+        lv.setOnItemClickListener(((parent, view, position, id) -> {
+            Intent intent = new Intent(getApplicationContext(), Profil.class);
+            System.out.println(file[(int)id]);
+            intent.putExtra("path", file[(int)id].getAbsolutePath());
+            startActivity(intent);
+        }));
         dodajRastlino.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         File directory = new File(path);
-        File[] file = directory.listFiles(filterJson);
+        file = directory.listFiles(filterJson);
         String JsonString = "{\"rastlina\": [";
 
         for (int i = 0; i < file.length; i++) {
@@ -123,12 +134,20 @@ public class MainActivity extends AppCompatActivity {
                     HashMap<String, String> item = rastlineModeli.get(i);
                     String imagePath = file[i].getAbsolutePath();
                     imagePath = imagePath.substring(0, imagePath.length() - 4) + "jpg";
-
+                    File imgFile = new File(imagePath);
                     ImageView imageView = new ImageView(MainActivity.this);
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imagePath);
-                    imageView.setImageBitmap(myBitmap);
+                    System.out.println("TEEEEST");
+                    System.out.println(imgFile.exists());
+                    if (imgFile.exists()) {
+                        BitmapFactory.Options opts = new BitmapFactory.Options();
+                        int sampleSize = 512; // Calculate your sampleSize here
+                        opts.inSampleSize = sampleSize;
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imagePath, opts);
+                        imageView.setImageBitmap(myBitmap);
+                        item.put("image", imagePath);
+                    }
+                     // Add the image path to the HashMap
 
-                    item.put("image", imagePath); // Add the image path to the HashMap
                 }
 
                 runOnUiThread(() -> adapter.notifyDataSetChanged());
