@@ -61,7 +61,6 @@ public class Profil extends AppCompatActivity {
         PrenosPodatkov pp = new PrenosPodatkov(file);
         String rezultat = pp.loadJson(file);
 
-        System.out.print(rezultat);
         String JsonString = "{\"rastlina\": [" + rezultat + "]}";
         rastlina = new JSONParser().parseToArrayList(JsonString);
 
@@ -98,12 +97,9 @@ public class Profil extends AppCompatActivity {
 
         MaterialCalendarView calendarView = findViewById(R.id.koledar);
 
-        System.out.println(datum.substring(0,4) + datum.substring(5,7) + datum.substring(8,10));
         LocalDate localDate = LocalDate.of(Integer.parseInt(datum.substring(0,4)), Integer.parseInt(datum.substring(5,7)), Integer.parseInt(datum.substring(8,10)));
         int naDni = Integer.parseInt(dni);
-        System.out.println(localDate + " ._ " + naDni);
 
-        // Create a list of highlighted dates
         List<CalendarDay> highlightedDates = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             highlightedDates.add(CalendarDay.from(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth())); // Dates are zero-based (0 = January, 1 = February, etc.)

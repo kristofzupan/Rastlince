@@ -22,29 +22,6 @@ public class PrenosPodatkov extends AppCompatActivity{
         this.file = file;
     }
 
-
-
-
-    /*protected void onCreate(Bundle savedInstanceState) {
-        //.onCreate(savedInstanceState);
-        //setContentView(R.layout.json_test);
-        //TextView t = findViewById(R.id.stevec);
-
-        /*
-
-        File directory = new File(path);
-
-        File[] file = directory.listFiles(filterJson);
-
-        //t.setText("Imena: ");
-
-        File f;
-        for (int i = 0 ; i < file.length; i++) {
-            loadJson(file, i);
-            //process(file[i].getName());
-        }
-    } */
-
     public String loadJson(File file) {
         //dobi file
         File directory = new File(path);

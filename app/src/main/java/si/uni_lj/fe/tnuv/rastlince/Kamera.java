@@ -218,8 +218,6 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
         potrdiSliko = findViewById(R.id.potrdiSliko);
         Gson gson = new Gson();
         ResponseData responseData = gson.fromJson(result, ResponseData.class);
-        //System.out.println(responseData.getFirstRespnseDataResultsSpeciesName());
-        //System.out.println(responseData.getFirstResponseDataResultsSpeciesCommonName());
         nalaganje.setVisibility(View.GONE);
         rezultatOverlay.setVisibility(View.VISIBLE);
         String tekstSortaIme = "";

@@ -93,8 +93,6 @@ public class UrediRastlino extends AppCompatActivity  implements DatePickerDialo
             shraniPot = outputDir.getAbsolutePath();
             shraniDatotekaIme = getOutputFile().getName();
         }
-        System.out.println(shraniPot);
-        System.out.println(shraniDatotekaIme);
 
         File zaShranitiFile = new File(shraniPot, shraniDatotekaIme);
         ImageButton potrdiGumb = findViewById(R.id.potrdiGumb);

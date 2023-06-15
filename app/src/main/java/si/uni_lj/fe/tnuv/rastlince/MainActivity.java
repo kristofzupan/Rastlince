@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         lv.setOnItemClickListener(((parent, view, position, id) -> {
             Intent intent = new Intent(getApplicationContext(), Profil.class);
-            System.out.println(file[(int)id]);
             intent.putExtra("path", file[(int)id].getAbsolutePath());
             startActivity(intent);
         }));
@@ -107,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
             File finalF = file[i];
             PrenosPodatkov pp = new PrenosPodatkov(finalF);
             String rezultat = pp.loadJson(finalF);
-            System.out.println(rezultat);
             if (i != 0) {
                 JsonString = JsonString + ",";
             }
@@ -115,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
         JsonString += "]}";
-        System.out.println(JsonString);
         rastlineModeli = new JSONParser().parseToArrayList(JsonString);
 
 
@@ -128,20 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
         );
         lv.setAdapter(adapter);
-        /*lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick (AdapterView < ? > parent, View view, int position, long id) {
-                Map<String, String> clickedItem = (Map<String, String>) parent.getItemAtPosition(position);
-                System.out.println(clickedItem);
-
-                Intent intent = new Intent(getApplicationContext(), Profil.class);
-
-                intent.putExtra("ime", clickedItem.get("ime"));
-                intent.putExtra("znanstveno ime",clickedItem.get("znanstveno ime"));
-                intent.putExtra("sorta", clickedItem.get("sorta"));
-                intent.putExtra("image", clickedItem.get("image"));
-                startActivity(intent);
-            }
-        });*/
 
         Handler handler = new Handler(Looper.getMainLooper());
         Thread thread = new Thread() {
@@ -152,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
                     imagePath = imagePath.substring(0, imagePath.length() - 4) + "jpg";
                     File imgFile = new File(imagePath);
                     ImageView imageView = new ImageView(MainActivity.this);
-                    System.out.println("TEEEEST");
-                    System.out.println(imgFile.exists());
                     if (imgFile.exists()) {
                         BitmapFactory.Options opts = new BitmapFactory.Options();
                         int sampleSize = 512; // Calculate your sampleSize here
