@@ -11,31 +11,33 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private static final String[] CAMERA_PERMISSION = new String[]{Manifest.permission.CAMERA};
     private static final int CAMERA_REQUEST_CODE = 10;
-    ArrayList<RastlinaModel> rastlineModeli = new ArrayList<>();
-    int[] rastlineSlike = {R.drawable.e, R.drawable.b, R.drawable.c, R.drawable.d};
-    private RecyclerViewAdapter.ClickListener listener;
+    private ListView lv;
+    private ArrayList<HashMap<String, String>> rastlineModeli;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.seznamRastlin);
-        pripraviModeleRastlin();
+        ImageButton dodajRastlino = findViewById(R.id.dodajRastlino);
 
-        RVsetOnClickListener();
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, rastlineModeli, listener);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ImageButton preminule = findViewById(R.id.PreminuleIkona);
+        //preminule.setImageResource(R.drawable.grave);
 
-        Button dodajRastlino = findViewById(R.id.dodajRastlino);
+        lv = findViewById(R.id.seznamRastlin);
 
         dodajRastlino.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,30 +49,66 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
-    private void RVsetOnClickListener() {
-        listener = new RecyclerViewAdapter.ClickListener() {
+        preminule.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v, int position) {
-                Intent intent = new Intent(getApplicationContext(), Profil.class);
-                intent.putExtra("ime", rastlineModeli.get(position).getRastlinaIme());
-                intent.putExtra("vrsta", rastlineModeli.get(position).getRastlinaVrsta());
-                intent.putExtra("vrstaLat", rastlineModeli.get(position).getRastlinaVrstaLat());
-                //intent.putExtra("img", rastlineModeli.get(position).);
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Preminule.class);
                 startActivity(intent);
             }
-        };
+        });
     }
 
-    private void pripraviModeleRastlin() {
-        String[] rastlineImena = getResources().getStringArray(R.array.imena_rastlin);
-        String[] rastlineVrste = getResources().getStringArray(R.array.vrste_rastlin);
-        String[] rastlineVrsteLat = getResources().getStringArray(R.array.vrste_rastlin_lat);
+    protected void onStart() {
+        super.onStart();
 
-        for (int i = 0; i < rastlineImena.length; i++) {
-            rastlineModeli.add(new RastlinaModel(rastlineImena[i], rastlineVrste[i], rastlineVrsteLat[i], rastlineSlike[i]));
-        }
+        String path = "/storage/emulated/0/Android/data/si.uni_lj.fe.tnuv.rastlince/files/Pictures/";
+
+
+
+        String s = "";
+
+        FileFilter filterJson = new FileFilter() {
+
+            public boolean accept(File f)
+            {
+                return f.getName().endsWith("json");
+            }
+        };
+
+        File directory = new File(path);
+        File[] file = directory.listFiles(filterJson);
+
+        for (int i = 0; i < file.length; i++) {
+            File finalF = file[i];
+            PrenosPodatkov pp = new PrenosPodatkov(finalF);
+            new Thread() {
+                public void run() {
+                    String rezultat = pp.loadJson(finalF);
+                    runOnUiThread(() -> prikaziPodatke(rezultat));
+                }
+            }.start();
+        };
+
+
+      /*  }*/
+    }
+
+    private void prikaziPodatke(String rezultat) {
+        System.out.println("main 97:" + rezultat.getClass());
+        rastlineModeli = new JSONParser().parseToArrayList(rezultat);
+        System.out.println("main 99000:" + rastlineModeli);
+        SimpleAdapter adapter = new SimpleAdapter(
+                this,
+                rastlineModeli,
+                R.layout.list_view_row,
+                new String[] {"ime", "znanstveno ime", "sorta"},
+                new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta}
+        );
+
+        // vstavi v activity_main (xml)
+        lv.setAdapter(adapter);
+
     }
 
     private boolean hasCameraPermission() {

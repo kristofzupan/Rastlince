@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -109,6 +110,11 @@ public class UrediRastlino extends AppCompatActivity  implements DatePickerDialo
                 jsonObject.put(getString(R.string.ime), imePolje.getText());
                 jsonObject.put(getString(R.string.zalivanjeDniJson), zalivanjeDni.getText());
                 jsonObject.put(getString(R.string.zalivanjeDateJson), localDate);
+
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.put(jsonObject);
+                /*JSONObject rastlina = new JSONObject();
+                rastlina.put("rastlina", jsonArray);*/
                 FileWriter fileWriter = new FileWriter(zaShranitiFile);
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                 bufferedWriter.write(jsonObject.toString());

@@ -13,10 +13,10 @@
     <color name="rastline_11">#a4bb83</color>
     <color name="rastline_12">#5c9256</color>
     <color name="rastline_13">#4b804c</color>
-    <color name="rastline_14">#606d3f</color>
-    <color name="rastline_15">#78824d</color>
     <color name="ozadje_zelena">#7DA691</color>
+    <color name="ozadje_preminule">#bfbfbf</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey_light">#D9D9D9</color>
+
 </resources>

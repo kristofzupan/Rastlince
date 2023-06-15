@@ -18,6 +18,7 @@
     <string name="znanstvenoImeJson">ZnanstvenoIme</string>
     <string name="zalivanjeDniJson">ZalivanjeDni</string>
     <string name="zalivanjeDateJson">ZalivanjeDate</string>
+    <string name="seznam_vasih_rastlin">Seznam vaših rastlin</string>
 
     <string-array name="imena_rastlin">
         <item>Marta</item>

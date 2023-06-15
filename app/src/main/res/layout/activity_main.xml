@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ozadje"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,20 +14,21 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seznam vaših rastlin"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
+        android:text="@string/seznam_vasih_rastlin"
+        android:textSize="22sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
         android:textColor="#000000"
         android:textStyle="bold"/>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ListView
         android:id="@+id/seznamRastlin"
         android:layout_width="match_parent"
         android:layout_height="700dp"
         android:layout_marginTop="0dp"
         app:layout_constraintTop_toBottomOf="@id/dodajRastlino"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/dodajRastlino"
         android:layout_width="match_parent"
         android:layout_height="105dp"
@@ -34,12 +36,15 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/background_grey"
+        android:cropToPadding="false"
         android:foregroundTint="@color/ozadje_zelena"
         android:gravity="center"
-        android:text="+"
+        android:padding="25dp"
+        android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seznamText" />
+        app:layout_constraintTop_toBottomOf="@+id/seznamText"
+        app:srcCompat="@drawable/plus" />
 
     <ImageButton
         android:id="@+id/PreminuleIkona"
@@ -49,7 +54,6 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/background_grey"
         android:padding="10dp"
-        android:backgroundTint="#D9D9D9"
         android:cropToPadding="false"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"

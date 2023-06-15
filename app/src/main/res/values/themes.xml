@@ -3,7 +3,7 @@
     <style name="Theme.Rastlince" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">false</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ccd9d9d9</item>
         <item name="colorPrimaryVariant">#ccd9d9d9</item>

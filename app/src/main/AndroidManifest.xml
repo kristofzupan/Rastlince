@@ -42,6 +42,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Profil"/>
+        <activity
+            android:name=".Preminule"
+            android:screenOrientation="portrait"
+            android:exported="true" />
     </application>
 
 </manifest>
