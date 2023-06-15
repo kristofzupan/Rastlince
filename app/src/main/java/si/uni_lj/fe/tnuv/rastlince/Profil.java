@@ -148,6 +148,18 @@ public class Profil extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        ImageButton svincnik = findViewById(R.id.svincnik);
+
+        svincnik.setOnClickListener(v -> {
+            Intent intent = new Intent(this, UrediRastlino.class);
+            intent.putExtra(getString(R.string.commonName), vrsta);
+            intent.putExtra(getString(R.string.scienceName), vrstaLat);
+            intent.putExtra(getString(R.string.pathImage), path.substring(0, path.length() - 4)+"jpg");
+            intent.putExtra("Days", dni);
+            intent.putExtra("Date", datum);
+            startActivity(intent);
+        });
     }
 
     // Custom decorator class to highlight dates

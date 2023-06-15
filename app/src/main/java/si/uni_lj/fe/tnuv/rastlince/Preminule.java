@@ -105,14 +105,8 @@ public class Preminule extends AppCompatActivity {
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map<String, String> clickedItem = (Map<String, String>) parent.getItemAtPosition(position);
-
                 Intent intent = new Intent(getApplicationContext(), Profil.class);
-
-                intent.putExtra("ime", clickedItem.get("ime"));
-                intent.putExtra("znanstveno ime", clickedItem.get("znanstveno ime"));
-                intent.putExtra("sorta", clickedItem.get("sorta"));
-                intent.putExtra("image", clickedItem.get("image"));
+                intent.putExtra("path", files[(int)id].getAbsolutePath());
                 startActivity(intent);
             }
         });

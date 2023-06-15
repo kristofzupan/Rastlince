@@ -57,14 +57,21 @@ public class UrediRastlino extends AppCompatActivity  implements DatePickerDialo
 
         String Sorta = getIntent().getStringExtra(getString(R.string.commonName));
         String ZnanstvenoIme = getIntent().getStringExtra(getString(R.string.scienceName));
+        String dni = getIntent().getStringExtra("Days");
+        String datum = getIntent().getStringExtra("Date");
+        if (dni != null) {
+            zalivanjeDni.setText(dni);
+        }
+        if (datum != null) {
+            zalivanjeDatum.setText(datum);
+        }
         String PotSlika = getIntent().getStringExtra(getString(R.string.pathImage));
-        String shraniPot = "";
-        String shraniDatotekaIme = "";
 
         ImageButton zapriGumb = findViewById(R.id.zapriGumb);
+        String finalPotSlika = PotSlika;
         zapriGumb.setOnClickListener(v -> {
-            if (!Objects.equals(PotSlika, "") && PotSlika != null) {
-                File zaZbrisatSlika = new File(PotSlika);
+            if (!Objects.equals(finalPotSlika, "") && finalPotSlika != null && datum == null) {
+                File zaZbrisatSlika = new File(finalPotSlika);
                 zaZbrisatSlika.delete();
             }
             Intent intent = new Intent(this, MainActivity.class);
@@ -83,18 +90,18 @@ public class UrediRastlino extends AppCompatActivity  implements DatePickerDialo
             znanstvenoPolje.setText(ZnanstvenoIme);
         }
         if (!Objects.equals(PotSlika, "") && PotSlika != null) {
-            shraniDatotekaIme = PotSlika.substring(PotSlika.length()-23, PotSlika.length()-4)+".json";
-            shraniPot = PotSlika.substring(0, PotSlika.length()-23);
+            System.out.println("EMPTY");
         } else {
             File outputDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             if (outputDir != null && !outputDir.exists()) {
                 outputDir.mkdirs();
             }
-            shraniPot = outputDir.getAbsolutePath();
-            shraniDatotekaIme = getOutputFile().getName();
+            PotSlika = outputDir.getAbsolutePath() + "/" + getOutputFile().getName();
         }
 
-        File zaShranitiFile = new File(shraniPot, shraniDatotekaIme);
+        PotSlika = PotSlika.substring(0, PotSlika.length()-3)+"json";
+        System.out.println("POTSLIKA: "+PotSlika);
+        File zaShranitiFile = new File(PotSlika);
         ImageButton potrdiGumb = findViewById(R.id.potrdiGumb);
         potrdiGumb.setOnClickListener(v -> {
             if (sortaPolje.getText().toString().equals("") || znanstvenoPolje.getText().toString().equals("") || imePolje.getText().toString().equals("") || zalivanjeDni.getText().toString().equals("") || zalivanjeDatum.getText().toString().equals("")) {
@@ -107,7 +114,7 @@ public class UrediRastlino extends AppCompatActivity  implements DatePickerDialo
                 jsonObject.put(getString(R.string.znanstvenoImeJson), znanstvenoPolje.getText());
                 jsonObject.put(getString(R.string.ime), imePolje.getText());
                 jsonObject.put(getString(R.string.zalivanjeDniJson), zalivanjeDni.getText());
-                jsonObject.put(getString(R.string.zalivanjeDateJson), localDate);
+                jsonObject.put(getString(R.string.zalivanjeDateJson), zalivanjeDatum.getText());
 
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(jsonObject);
@@ -151,7 +158,7 @@ public class UrediRastlino extends AppCompatActivity  implements DatePickerDialo
 
         // Create a file to save the captured image
         String timeStamp = new SimpleDateFormat(getString(R.string.datumSimpleFormat), Locale.getDefault()).format(new Date());
-        String fileName = "IMG_" + timeStamp + ".json";
+        String fileName = "IMG_" + timeStamp + ".jpg";
         Log.d(TAG, fileName + " ---- " + outputDir);
         return new File(outputDir, fileName);
     }
