@@ -5,25 +5,19 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -34,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String[] CAMERA_PERMISSION = new String[]{Manifest.permission.CAMERA};
@@ -100,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         file = directory.listFiles(filterJson);
         String JsonString = "{\"rastlina\": [";
 
+    if (file != null) {
         for (int i = 0; i < file.length; i++) {
             File finalF = file[i];
             PrenosPodatkov pp = new PrenosPodatkov(finalF);
@@ -112,10 +106,12 @@ public class MainActivity extends AppCompatActivity {
         }
         JsonString += "]}";
         rastlineModeli = new JSONParser().parseToArrayList(JsonString);
+    }
 
+    SimpleAdapter adapter = null;
 
-
-        SimpleAdapter adapter = new SimpleAdapter(
+    if (rastlineModeli != null) {
+        adapter = new SimpleAdapter(
                 MainActivity.this,
                 rastlineModeli,
                 R.layout.list_view_row,
@@ -123,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
         )
         {
-                public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 CardView cardView = view.findViewById(R.id.seznamCard);
 
@@ -146,12 +142,17 @@ public class MainActivity extends AppCompatActivity {
                 cardView.setCardBackgroundColor(colorCode.get(position % 13));
 
                 return view;
-                }
+            }
         };
 
         lv.setAdapter(adapter);
+    }
 
+
+    if (rastlineModeli == null) {
+    } else {
         Handler handler = new Handler(Looper.getMainLooper());
+        SimpleAdapter finalAdapter = adapter;
         Thread thread = new Thread() {
             public void run() {
                 for (int i = 0; i < rastlineModeli.size(); i++) {
@@ -168,14 +169,16 @@ public class MainActivity extends AppCompatActivity {
                         item.put("image", drawablePath);
                         //ImageView
                     }
-                     // Add the image path to the HashMap
+                    // Add the image path to the HashMap
 
                 }
-
-                runOnUiThread(() -> adapter.notifyDataSetChanged());
+                runOnUiThread(() -> finalAdapter.notifyDataSetChanged());
             }
         };
         thread.start();
+    }
+
+
 
 
     }

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -44,9 +43,18 @@ public class Profil extends AppCompatActivity {
 
         ImageButton puscica = findViewById(R.id.profilPuscica);
         ImageButton grob = findViewById(R.id.grob);
+        ImageButton svincnik = findViewById(R.id.svincnik);
+
 
         String path = getIntent().getStringExtra("path");
         long id = getIntent().getLongExtra("id",0);
+
+        if (path.length() > 76) {
+            if (path.substring(76).startsWith("P")) {
+                grob.setVisibility(View.GONE);
+                svincnik.setVisibility(View.GONE);
+            }
+        }
 
         puscica.setOnClickListener(new View.OnClickListener() {
 
@@ -150,17 +158,10 @@ public class Profil extends AppCompatActivity {
                 boolean renamedImg = img.renameTo(newImg);
                 boolean renamedFile = file.renameTo(newFile);
 
-                if (renamedImg && renamedFile) {
-                    System.out.println("Files renamed successfully.");
-                } else {
-                    System.out.println("Failed to rename the files.");
-                }
                 Intent intent = new Intent(getApplicationContext(), Preminule.class);
                 startActivity(intent);
             }
         });
-
-        ImageButton svincnik = findViewById(R.id.svincnik);
 
         svincnik.setOnClickListener(v -> {
             Intent intent = new Intent(this, UrediRastlino.class);
@@ -192,16 +193,5 @@ public class Profil extends AppCompatActivity {
         public void decorate(DayViewFacade view) {
             view.addSpan(new DotSpan(5, color));
         }
-    }
-
-    public static Bitmap rotateBitmap(Bitmap sourceBitmap, float angleDegrees) {
-        // Create a matrix for the rotation transformation
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angleDegrees);
-
-        // Create a new rotated Bitmap
-        Bitmap rotatedBitmap = Bitmap.createBitmap(sourceBitmap, 0, 0, sourceBitmap.getWidth(), sourceBitmap.getHeight(), matrix, true);
-
-        return rotatedBitmap;
     }
 }

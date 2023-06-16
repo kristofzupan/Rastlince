@@ -1,31 +1,23 @@
 package si.uni_lj.fe.tnuv.rastlince;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Preminule extends AppCompatActivity {
 
@@ -72,68 +64,71 @@ public class Preminule extends AppCompatActivity {
             }
         };
 
+        SimpleAdapter adapter = null;
         File directory = new File(path);
         File[] files = directory.listFiles(filterJson);
         System.out.print(files.length);
         String JsonString = "{\"rastlina\": [";
 
-        for (int i = 0; i < files.length; i++) {
-            File finalF = files[i];
-            PrenosPodatkov pp = new PrenosPodatkov(finalF);
-            String rezultat = pp.loadJson(finalF);
-            if (i != 0) {
-                JsonString = JsonString + ",";
-            }
-            if (isUTF8(rezultat)) {
-                JsonString = JsonString + rezultat;
-            } else {
-                break;
-            }
-        }
-        JsonString += "]}";
-        //System.out.println(JsonString);
-        rastlineModeliP = new JSONParser().parseToArrayList(JsonString);
-
-        SimpleAdapter adapter = new SimpleAdapter(
-                Preminule.this,
-                rastlineModeliP,
-                R.layout.list_view_row,
-                new String[]{"ime", "znanstveno ime", "sorta", "image"},
-                new int[]{R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
-        );
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), Profil.class);
-                intent.putExtra("path", files[(int)id].getAbsolutePath());
-                intent.putExtra("id", id);
-                startActivity(intent);
-            }
-        });
-
-        Handler handler = new Handler(Looper.getMainLooper());
-        Thread thread = new Thread() {
-            public void run() {
-                for (int i = 0; i < rastlineModeliP.size(); i++) {
-                    HashMap<String, String> item = rastlineModeliP.get(i);
-                    String imagePath = files[i].getAbsolutePath();
-                    imagePath = imagePath.substring(0, imagePath.length() - 4) + "jpg";
-
-                    File imgFile = new File(imagePath);
-                    if (imgFile.exists()) {
-                        item.put("image", imagePath);
-                    } else {
-                        int index = i % 9;
-                        String drawablePath = "android.resource://" + getPackageName() + "/drawable/i"+index;
-                        item.put("image", drawablePath);
-                    }
-
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                File finalF = files[i];
+                PrenosPodatkov pp = new PrenosPodatkov(finalF);
+                String rezultat = pp.loadJson(finalF);
+                if (i != 0) {
+                    JsonString = JsonString + ",";
                 }
-                runOnUiThread(() -> adapter.notifyDataSetChanged());
+                if (isUTF8(rezultat)) {
+                    JsonString = JsonString + rezultat;
+                } else {
+                    break;
+                }
             }
-        };
-        thread.start();
+            JsonString += "]}";
+            //System.out.println(JsonString);
+            rastlineModeliP = new JSONParser().parseToArrayList(JsonString);
 
+            adapter = new SimpleAdapter(
+                    Preminule.this,
+                    rastlineModeliP,
+                    R.layout.list_view_row,
+                    new String[]{"ime", "znanstveno ime", "sorta", "image"},
+                    new int[]{R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
+            );
+            lv.setAdapter(adapter);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getApplicationContext(), Profil.class);
+                    intent.putExtra("path", files[(int)id].getAbsolutePath());
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
+            });
+
+            Handler handler = new Handler(Looper.getMainLooper());
+            SimpleAdapter finalAdapter = adapter;
+            Thread thread = new Thread() {
+                public void run() {
+                    for (int i = 0; i < rastlineModeliP.size(); i++) {
+                        HashMap<String, String> item = rastlineModeliP.get(i);
+                        String imagePath = files[i].getAbsolutePath();
+                        imagePath = imagePath.substring(0, imagePath.length() - 4) + "jpg";
+
+                        File imgFile = new File(imagePath);
+                        if (imgFile.exists()) {
+                            item.put("image", imagePath);
+                        } else {
+                            int index = i % 9;
+                            String drawablePath = "android.resource://" + getPackageName() + "/drawable/i"+index;
+                            item.put("image", drawablePath);
+                        }
+
+                    }
+                    runOnUiThread(() -> finalAdapter.notifyDataSetChanged());
+                }
+            };
+            thread.start();
+        }
 
     }
 
