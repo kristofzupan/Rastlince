@@ -1,34 +1,29 @@
 package si.uni_lj.fe.tnuv.rastlince;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -36,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -124,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 new String[] {"ime", "znanstveno ime", "sorta", "image"},
                 new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
         );
+        adapter.setViewBinder(new CustomViewBinder());
         lv.setAdapter(adapter);
 
         Handler handler = new Handler(Looper.getMainLooper());
@@ -208,4 +204,38 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    private class CustomViewBinder implements SimpleAdapter.ViewBinder {
+
+        @Override
+        public boolean setViewValue(View view, Object data, String textRepresentation) {
+            // Generate a random color
+            System.out.println(view.getClass());
+            System.out.println(view.getParent().getParent());
+            View constraint = (ConstraintLayout) view.getParent();
+            CardView card = (CardView) view.getParent().getParent();
+
+            if(view instanceof TextView) {
+                // Set the random color as the background for the item view
+                int color = getRandomColor();
+                card.setCardBackgroundColor(color);
+            }
+
+            return true;
+        }
+    }
+
+    private int getRandomColor() {
+        List<Integer> colorCode = new ArrayList<>();
+
+        colorCode.add(R.color.rastline_1);
+        colorCode.add(R.color.rastline_2);
+        colorCode.add(R.color.rastline_3);
+        colorCode.add(R.color.rastline_4);
+        colorCode.add(R.color.rastline_5);
+
+        Random r = new Random();
+        int number = r.nextInt(colorCode.size());
+        return colorCode.get(number);
+
+    };
 }
