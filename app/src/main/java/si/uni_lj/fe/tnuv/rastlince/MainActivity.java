@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(((parent, view, position, id) -> {
             Intent intent = new Intent(getApplicationContext(), Profil.class);
             intent.putExtra("path", file[(int)id].getAbsolutePath());
+            intent.putExtra("id", id);
             startActivity(intent);
         }));
         dodajRastlino.setOnClickListener(new View.OnClickListener() {
@@ -118,8 +121,34 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.list_view_row,
                 new String[] {"ime", "znanstveno ime", "sorta", "image"},
                 new int[] {R.id.rastlinaIme, R.id.rastlinaVrstaLat, R.id.rastlinaVrsta, R.id.rastlinaIkona}
-        );
-        adapter.setViewBinder(new CustomViewBinder());
+        )
+        {
+                public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                CardView cardView = view.findViewById(R.id.seznamCard);
+
+                List<Integer> colorCode = new ArrayList<>();
+
+                colorCode.add(0xFF527853);
+                colorCode.add(0xFFa1b089);
+                colorCode.add(0xFF4b804c);
+                colorCode.add(0xFFa4bb83);
+                colorCode.add(0xFF7e9871);
+                colorCode.add(0xFF6c8d60);
+                colorCode.add(0xFF588159);
+                colorCode.add(0xFF91a57b);
+                colorCode.add(0xFF88a972);
+                colorCode.add(0xFF588159);
+                colorCode.add(0xFF496e4c);
+                colorCode.add(0xFF709d62);
+                colorCode.add(0xFF5c9256);
+
+                cardView.setCardBackgroundColor(colorCode.get(position % 13));
+
+                return view;
+                }
+        };
+
         lv.setAdapter(adapter);
 
         Handler handler = new Handler(Looper.getMainLooper());
@@ -130,14 +159,14 @@ public class MainActivity extends AppCompatActivity {
                     String imagePath = file[i].getAbsolutePath();
                     imagePath = imagePath.substring(0, imagePath.length() - 4) + "jpg";
                     File imgFile = new File(imagePath);
-                    ImageView imageView = new ImageView(MainActivity.this);
                     if (imgFile.exists()) {
-                        BitmapFactory.Options opts = new BitmapFactory.Options();
-                        int sampleSize = 512; // Calculate your sampleSize here
-                        opts.inSampleSize = sampleSize;
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imagePath, opts);
-                        imageView.setImageBitmap(myBitmap);
                         item.put("image", imagePath);
+                    } else {
+                        System.out.println("NO IMAGE");
+                        int index = i % 9;
+                        String drawablePath = "android.resource://" + getPackageName() + "/drawable/i"+index;
+                        item.put("image", drawablePath);
+                        //ImageView
                     }
                      // Add the image path to the HashMap
 
@@ -204,38 +233,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    private class CustomViewBinder implements SimpleAdapter.ViewBinder {
 
-        @Override
-        public boolean setViewValue(View view, Object data, String textRepresentation) {
-            // Generate a random color
-            System.out.println(view.getClass());
-            System.out.println(view.getParent().getParent());
-            View constraint = (ConstraintLayout) view.getParent();
-            CardView card = (CardView) view.getParent().getParent();
-
-            if(view instanceof TextView) {
-                // Set the random color as the background for the item view
-                int color = getRandomColor();
-                card.setCardBackgroundColor(color);
-            }
-
-            return true;
-        }
-    }
-
-    private int getRandomColor() {
-        List<Integer> colorCode = new ArrayList<>();
-
-        colorCode.add(R.color.rastline_1);
-        colorCode.add(R.color.rastline_2);
-        colorCode.add(R.color.rastline_3);
-        colorCode.add(R.color.rastline_4);
-        colorCode.add(R.color.rastline_5);
-
-        Random r = new Random();
-        int number = r.nextInt(colorCode.size());
-        return colorCode.get(number);
-
-    };
 }

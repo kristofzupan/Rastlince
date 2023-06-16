@@ -110,9 +110,6 @@ public class Notification {
 
             LocalDate today = LocalDate.now();
             long dayDifference = ChronoUnit.DAYS.between(localDate, today);
-            System.out.println(dayDifference);
-            System.out.println("NOOOOT: " + datum + " : " + dni);
-            System.out.println("Diff % dni: " + dayDifference % naDni);
             if (dayDifference % naDni == 0) {
                 zaZaliti++;
                 notification += ime+"\n";

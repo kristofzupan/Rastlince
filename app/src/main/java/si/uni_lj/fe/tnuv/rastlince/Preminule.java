@@ -81,7 +81,6 @@ public class Preminule extends AppCompatActivity {
             File finalF = files[i];
             PrenosPodatkov pp = new PrenosPodatkov(finalF);
             String rezultat = pp.loadJson(finalF);
-            System.out.println("main 99: " + rezultat);
             if (i != 0) {
                 JsonString = JsonString + ",";
             }
@@ -107,6 +106,7 @@ public class Preminule extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), Profil.class);
                 intent.putExtra("path", files[(int)id].getAbsolutePath());
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });
@@ -119,13 +119,16 @@ public class Preminule extends AppCompatActivity {
                     String imagePath = files[i].getAbsolutePath();
                     imagePath = imagePath.substring(0, imagePath.length() - 4) + "jpg";
 
-                    ImageView imageView = new ImageView(Preminule.this);
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imagePath);
-                    imageView.setImageBitmap(myBitmap);
+                    File imgFile = new File(imagePath);
+                    if (imgFile.exists()) {
+                        item.put("image", imagePath);
+                    } else {
+                        int index = i % 9;
+                        String drawablePath = "android.resource://" + getPackageName() + "/drawable/i"+index;
+                        item.put("image", drawablePath);
+                    }
 
-                    item.put("image", imagePath); // Add the image path to the HashMap
                 }
-                System.out.println("149:" + rastlineModeliP);
                 runOnUiThread(() -> adapter.notifyDataSetChanged());
             }
         };

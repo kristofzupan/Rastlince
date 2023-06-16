@@ -139,9 +139,11 @@ public class Kamera extends AppCompatActivity implements NetworkTask.NetworkCall
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
+        System.out.println("height: "+height + "width:" + width);
+        Size res = new Size(width, height/3*2);
 
         Preview preview = new Preview.Builder().build();
-        slikaZajemanje = new ImageCapture.Builder().setTargetRotation(Surface.ROTATION_0).build();
+        slikaZajemanje = new ImageCapture.Builder().setTargetRotation(Surface.ROTATION_0).setTargetResolution(res).build();
         CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
         preview.setSurfaceProvider(predPogled.createSurfaceProvider());
         cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, slikaZajemanje, preview);

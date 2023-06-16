@@ -46,6 +46,7 @@ public class Profil extends AppCompatActivity {
         ImageButton grob = findViewById(R.id.grob);
 
         String path = getIntent().getStringExtra("path");
+        long id = getIntent().getLongExtra("id",0);
 
         puscica.setOnClickListener(new View.OnClickListener() {
 
@@ -64,26 +65,36 @@ public class Profil extends AppCompatActivity {
         String JsonString = "{\"rastlina\": [" + rezultat + "]}";
         rastlina = new JSONParser().parseToArrayList(JsonString);
 
-        Bitmap myBitmap = BitmapFactory.decodeFile(path.substring(0, path.length() - 4) + "jpg");
-        try {
-            ExifInterface exif = new ExifInterface(path.substring(0, path.length() - 4) + "jpg");
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-            Matrix matrix = new Matrix();
-            if (orientation == 6) {
-                matrix.postRotate(90);
-            }
-            else if (orientation == 3) {
-                matrix.postRotate(180);
-            }
-            else if (orientation == 8) {
-                matrix.postRotate(270);
-            }
-            myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true); // rotating bitmap
-        }
-        catch (Exception e) {
 
+        File imgFile = new File(path.substring(0, path.length() - 4) + "jpg");
+        if (imgFile.exists()) {
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(path.substring(0, path.length() - 4) + "jpg");
+
+            try {
+                ExifInterface exif = new ExifInterface(path.substring(0, path.length() - 4) + "jpg");
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                Matrix matrix = new Matrix();
+                if (orientation == 6) {
+                    matrix.postRotate(90);
+                } else if (orientation == 3) {
+                    matrix.postRotate(180);
+                } else if (orientation == 8) {
+                    matrix.postRotate(270);
+                }
+                myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), matrix, true); // rotating bitmap
+            } catch (Exception e) {
+
+            }
+            slikaPolje.setImageBitmap(myBitmap);
+        } else {
+            long index = id % 9;
+            String drawableName = "i" + index;
+            int drawableResourceId = getResources().getIdentifier(drawableName, "drawable", getPackageName());
+
+            slikaPolje.setImageResource(drawableResourceId);
         }
-        slikaPolje.setImageBitmap(myBitmap);
+
 
         String ime = rastlina.get(0).get("ime");
         String vrsta = rastlina.get(0).get("sorta");
